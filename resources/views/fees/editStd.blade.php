@@ -2,18 +2,18 @@
 
 @section('content')
 <div class='container'>
-    <a href='/stdClass/{{$student->class_id}}' class='btn btn-secondary btn-sm'><i class='fas fa-arrow-left'></i>Back</a>
-    <h3 class='text-center'>Edit Student</h3><hr>
-
+    <a href='/fees' class='btn btn-secondary btn-sm'><i class='fas fa-arrow-left'></i>Back</a>
+    <h4 class='text-center'>Edit Student</h4><hr>
+    
     <div style='margin:0 20%'>
-    <form role='form' action='/students/{{$student->id}}' method='POST' class='form-group'>
+    <form action='/fees/{{$student->id}}' method='POST' class='form-group'>
         @csrf
         <input type='hidden' name='_method' value='PUT'>
         <label for='stdName'>NAME</label>
         <input type='text' name='stdName' value ='{{$student->name}}' class='form-control'>
         <label class='control-label'>Class</label>
         <select name='stdClass' class='browser-default custom-select mb-3' required>
-            <option value = '{{$stdClass->id}}' selected>{{$stdClass->className}}</option>
+            <option value='{{$stdClass->id}}' selected>{{$stdClass->className}}</option>
                 @foreach($stdClasses as $stdClass)
                 <option value='{{$stdClass->id}}'>{{$stdClass->className}}</option>
                 @endforeach
@@ -29,7 +29,7 @@
     </form>
     </div>
 
- </div>
+    </div>
 
 
 

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class='container'>
-        <a href='/dashboard' class='btn btn-secondary btn-sm'><i class='fas fa-arrow-left'></i>Back</a>
+        <a href='/fees' class='btn btn-secondary btn-sm'><i class='fas fa-arrow-left'></i>Back</a>
         <h4 class='text-center'>Student Fee Report</h4>
         @if(count($students) > 0)
             <div class='well'>
@@ -37,13 +37,13 @@
                         <tr>
                             <td>Fees</td>
                             <td>Paid</td>
-                            <td>Balance</td>
+                            <td>owing</td>
                             <td>Fees</td>
                             <td>Paid</td>
-                            <td>Balance</td>
+                            <td>owing</td>
                             <td>Fees</td>
                             <td>Paid</td>
-                            <td>Balance</td>
+                            <td>owing</td>
                         </tr>
                         <tr>
                             @if(!empty($firstFees) & !empty($firstPaid))
@@ -106,9 +106,9 @@
     
                 </div>
                 @else
-                    <h1 class='text-center text-success'>Student has not paid</h1>
-                    <h5 class='text-center'>OR</h5>
-                    <h3 class='text-center text-success'>Student and class do not match</h3>
+                <div class='container'>
+                    <h1 class='text-center text-success'>No records of payment from {{$stdName}} in {{$academicYear}}</h1>
+                </div>
                 @endif
 
     </div>

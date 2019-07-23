@@ -3,14 +3,16 @@
 @section('content')
     <div class='container'>
         <a href='/dashboard' class='btn btn-secondary btn-sm'><i class='fas fa-arrow-left'></i> Back</a>
-        <h4 class='text-center'>Manage Fees</h4><hr>
+        <h5 class='text-center'>Manage Fees</h5><hr>
+    
         <div class='text-right'>
-            <button class='btn btn-success' data-toggle='modal' data-target='#paid'>Check Payment By Class</button>
+            <a href='/students/create' class='btn btn-success bt-lg'><i class='fas fa-plus fa-lg'></i> Student</a>
+            <button class='btn btn-primary' data-toggle='modal' data-target='#paid'>Check Payments By Class</button>
         </div>
         <div id='paid' class='modal fade' role='dialog'>
             <div class='modal-dialog' role='document'>
                 <div class='modal-content'>
-                    <div class='close' data-dismiss='modal'>&times;</div>
+                    <div class='close text-right' data-dismiss='modal'>&times;</div>
                     <div class='modal-header'>
                         <h3 class='modal-title'>Student with part or full payment</h3>
                     </div>
@@ -32,7 +34,7 @@
                             </select>
                                 
                             <label class='control-label'>Academic Year</label>
-                            <input type='text' name='academicYear' class='form-control'>
+                            <input type='text' name='academicYear' class='form-control' value='{{date('Y')-1}}/{{date('Y')}}'><br>
                             <button type='submit' class='btn btn-primary'>Save</button>
                         </form>
                     </div>
@@ -58,28 +60,53 @@
             </td>
             </tr>
         </table>
+        @if(count($students) > 0)
         <div class='well'>
             <table class='table table-striped'>
                 <tr>
                     <th>STUDENT</th>
                     <th>CLASS</th>
+                    <th>GUARDIAN</th>
+                    <th>TELEPHONE
                     <th>FEES</th>
+                    <th></th>
                     <th>Action</th>
+                    <th></th>
                 </tr>
                 @foreach($students as $student)
                 <tr>
                     <td>{{$student->stdName}}</td>
                     <td>{{$student->class}}</td>
+                    <td>{{$student->guardian}}</td>
+                    <td>{{$student->tel}}</td>
                     <td>{{$student->fees}}</td>
                     <td> 
-                        <a href='/takes/{{$student->stdID}}' class='btn btn-primary'>Take Fees</a>
+                        <a href='/takes/{{$student->stdID}}' class='btn btn-success'><i class='fas fa-dollar-sign'></i> Take Fees</a>        
                     </td>
+                    <td>
+            
+                        <a href='/fees/{{$student->stdID}}/edit' class='btn btn-primary'><i class='fas fa-edit'></i> Edit</a>
+                    </td>
+                    <td>
+                        <form action='/fees/{{$student->stdID}}' class='form-group' method='POST'>
+                            @csrf
+                            <input type='hidden' name='_method' value='DELETE'>
+                            <button type='submit' class='btn btn-danger'><i class='fas fa-trash'></i> Delete</button>
+                        </form>
+                    </td>    
+
                 </tr>
                 @endforeach
+            @else 
+                <div class='container text-center'>
+                    <h3>No Student Added</h3>
+                    <p><small><i>please make sure classes have been added before you add students</i></small></p>
+                </div>
+            @endif
             </table>
             {{$students->links()}}
-        </div>
 
+        </div>
     </div>
 
 @endsection

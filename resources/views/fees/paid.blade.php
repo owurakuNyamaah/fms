@@ -6,15 +6,19 @@
         <h3 class='text-center'><b>{{$class}}</b> {{$term}} - {{$academicYear}}</h3>
     <table class='table table-bordered'>
         <tr>
-            <th>Students with Part or Full Payment</th>
-            <th>Students with No Payment</th>
+            <th>Students with Full or Part Payment ( {{count($students)}} )</th>
+            <th>Students with No Payment  ( {{count($debts)}} )</th>
         </tr>
         <tr>
             @if(count($students) > 0)
             <td>
                 <ul class='list-group'>
                     @foreach($students as $std)
-                        <li class='list-group-item'>{{$std->student}}</li>
+                        <li class='list-group-item'>
+                            <button class='btn btn-success btn-sm' style='margin-right:20px'><b>paid {{$std->paid}}<br>
+                                owing {{$std->fees - $std->paid}}</b></button> {{$std->student}}
+    
+                         </li> 
                     @endforeach
                 </ul>
             </td>

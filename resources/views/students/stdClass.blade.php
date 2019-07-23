@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class='container'>
     <a href='/dashboard' class='btn btn-secondary btn-sm'><i class='fas fa-arrow-left'></i> Back</a>
-    <h4 class='text-center'>Manage Class</h4><hr>
+    <h5 class='text-center'>Manage Class</h5><hr>
 
     <div class='text-right'>
         <button class='btn btn-success btn-lg' data-toggle='modal' data-target='#addClass'><i class='fas fa-plus'></i> Class</button>
@@ -24,15 +25,15 @@
                         <input type='text' name='className' class='form-control' required><br>
                         <label class='control-label'>Class Category</label><br>
                         <select name='category' class='browser-default custom-select mb-3' required>
-                                <option selected> </option>
-                                <option value='KG'>KG</option>
-                                <option value='nursery'>Nursery</option>
-                                <option value='primary'>Primary</option>
-                                <option value='jhs'>J.H.S</option>
+                            <option selected> </option>
+                            <option value='nursery & KG'>Nursery and KG</option>
+                            <option value='lower primary'>Lower Primary</option>
+                            <option value='upper primary'>Upper Primary</option>
+                            <option value='jhs'>J.H.S</option>
                         </select><br>    
 
                         <label class='control-label'>Fees</label><br>
-                        <input type='number' name='fees' class='form-control'><br>
+                        <input type='number' name='fees' class='form-control' placeholder='GHs'><br>
     
                         <button type='submit' name='submit' class='btn btn-primary'>Save</button>
                     </form>
@@ -54,15 +55,15 @@
                         <input type='hidden' name='_method' value='PUT'>
                         <label class='control-label'>Class Category</label><br>
                         <select name='category' class='browser-default custom-select mb-3' required>
-                                <option selected> </option>
-                                <option value='KG'>KG</option>
-                                <option value='nursery'>Nursery</option>
-                                <option value='primary'>Primary</option>
-                                <option value='jhs'>J.H.S</option>
+                            <option selected> </option>
+                            <option value='nursery & KG'>Nursery and KG</option>
+                            <option value='lower primary'>Lower Primary</option>
+                            <option value='upper primary'>Upper Primary</option>
+                            <option value='jhs'>J.H.S</option>
                         </select><br>    
 
                         <label class='control-label'>Fees</label><br>
-                        <input type='number' name='fees' class='form-control' required><br>
+                        <input type='number' name='fees' class='form-control' placeholder='GHs' required><br>
     
                         <button type='submit' name='submit' class='btn btn-primary'>Save</button>
                     </form>
@@ -71,17 +72,9 @@
         </div>
     </div>
         @if(count($classes) > 0 )
-        @foreach($classes as $class)
-        <form action='/stdClass/{{$class->id}}' method='post' class='form-inline'>
-        @endforeach
-            @csrf
-            <input type='hidden' name='_method' value='GET'>
-            <input type='search' name='searchStd' class='form-control' placeholder='Search by Class Name'>
-            <button type='submit' name='submit' class='btn btn-primary btn-sm' style='margin-right:50px'><i class='fas fa-search'></i></button>
-        </form>
+            
         <table class='table'>
             <tr>
-                <th>Class ID</th>
                 <th>Class Name</th>
                 <th>Category</th>
                 <th>Fees</th>
@@ -90,10 +83,9 @@
             </tr>
             @foreach($classes as $class)
                 <tr>
-                    <td>{{$class->id}}</td>
-                    <td>{{$class->className}}</td>
+                    <td><a href='stdClass/{{$class->id}}'>{{$class->className}}</a></td>
                     <td>{{$class->category}}</td>
-                    <td>{{$class->fees}}</td>
+                    <td><i>GHs</i> {{$class->fees}}</td>
                     <td> 
                         <a href='/stdClass/{{$class->id}}/edit' class='btn btn-primary btn-sm'><i class='fas fa-edit'></i> Edit</a>
                     </td>
@@ -109,7 +101,6 @@
             @endforeach
         </table>
         {{$classes->links()}}
-
         @else 
             <h1 class='text-center'>No Class Added</h1>
     @endif

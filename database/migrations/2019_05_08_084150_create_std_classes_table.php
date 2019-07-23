@@ -15,8 +15,8 @@ class CreateStdClassesTable extends Migration
     {
         Schema::create('std_classes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->char('className',191);
-            $table->char('category',191);
+            $table->string('className',255);
+            $table->string('category',255);
             $table->integer('fees')->nullable();
             $table->timestamps();
         });

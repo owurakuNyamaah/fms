@@ -21,10 +21,12 @@ Route::get('/dashboard', 'DashboardController@index');
 Route::resource('/students', 'StudentsController');
 Route::resource('/stdClass', 'StdClassController');
 Route::resource('/fees', 'FeesController');
-Route::resource('/reports', 'ReportsController');
 
 Route::post('/dashboard/show', 'DashboardController@show');
 Route::put('/changefees', 'StdClassController@fees');
 Route::post('/searchStd', 'StudentsController@search');
 Route::get('/takes/{take}','FeesController@take');
 Route::get('/paid','FeesController@paid');
+
+// Route::get('/promote/{id}', 'StdClassController@promote');
+// Route::get('/promoteStds','StdClassController@stdPromoted');

@@ -9,6 +9,10 @@ use DB;
 
 class StudentsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,9 +20,7 @@ class StudentsController extends Controller
      */
     public function index()
     {
-        $students = Student::orderby('name','asc')->paginate(20);
-        $stdClasses = StdClass::all();
-        return view('students.index',compact('students','stdClasses'));
+        //
     }
 
     /**
@@ -28,7 +30,9 @@ class StudentsController extends Controller
      */
     public function create()
     {
-        //
+        $user_id = auth()->user()->id;
+        $stdClasses = StdClass::where('user_id',$user_id)->orderby('className','asc')->get();
+        return view('fees.addStd',compact('stdClasses'));
     }
 
     /**
@@ -39,22 +43,34 @@ class StudentsController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'stdName'=>'required',
-        //     'stdClass'=>'required',
-        //     'stdGuardian'=>'required',
-        //     'guardian_no'=>'required'
-        // ]);
+        $request->validate([
+            'stdName'=>'required',
+            'stdClass'=>'required',
+        ]);
 
-        $student = new Student;
-        $student->name = $request->input('stdName');
-        $student->class = $request->input('stdClass');
-        $student->guardian = $request->input('stdGuardian');
-        $student->guardian_no = $request->input('guardian_no');
-        $student->address = $request->input('address');
-        $student->save();
-
-        return redirect('/students')->with('success','Student Added');
+        $user_id = auth()->user()->id;
+        $name = $request->input('stdName');
+        $class_id = $request->input('stdClass');
+        //if student already exits in a particular class do not store that student's info
+        $getStd = DB::select("SELECT name,class_id from students where name = '$name' and class_id=$class_id and user_id = $user_id ");
+        $class = StdClass::find($class_id);
+        if(count($getStd)>0) {
+            if($name == $getStd[0]->name && $class_id == $getStd[0]->class_id) {
+                return redirect('/students/create')->with('error',$name.' already exist in '.$class->className);
+            }
+        }
+        else {
+            $student = new Student;
+            $student->name = $request->input('stdName');
+            $student->class_id = $request->input('stdClass');
+            $student->guardian = $request->input('stdGuardian');
+            $student->guardian_no = $request->input('guardian_no');
+            $student->address = $request->input('address');
+            $student->user_id = auth()->user()->id;
+            $student->save();
+    
+            return redirect('/students/create')->with('success', $student->name.' has been Added to '.$class->className);
+        }
     }
 
     /**
@@ -79,10 +95,14 @@ class StudentsController extends Controller
      */
     public function edit($id)
     {
+        $user_id = auth()->user()->id;
+        
         $student = Student::find($id);
-        $stdClasses = StdClass::all();
+        $stdClass = StdClass::find($student->class_id);
+    
+        $stdClasses = StdClass::where('user_id',$user_id)->orderby('className','asc')->get();
 
-        return view('students.editStd',compact('student','stdClasses'));
+        return view('students.editStd',compact('student','stdClass','stdClasses'));
     }
 
     /**
@@ -95,15 +115,17 @@ class StudentsController extends Controller
     public function update(Request $request, $id)
     {
         $student = Student::find($id);
+        $stdClass = StdClass::find($student->class_id);
 
         $student->name = $request->input('stdName');
-        $student->class = $request->input('stdClass');
+        $student->class_id = $request->input('stdClass');
         $student->guardian = $request->input('stdGuardian');
         $student->guardian_no = $request->input('guardian_no');
         $student->address = $request->input('address');
+        $student->user_id = auth()->user()->id;
         $student->save();
 
-        return redirect('/students')->with('success','Student data updated');
+        return redirect('/stdClass/'.$stdClass->id)->with('success', $student->name.' data updated');
     }
 
     /**
@@ -117,7 +139,7 @@ class StudentsController extends Controller
         $student = Student::find($id);
         $student->delete();
 
-        return redirect('/students')->with('error','Student Deleted');
+        return redirect('/students')->with('error',"$student->name Deleted");
     }
 
 }

@@ -15,12 +15,12 @@ class CreateFeesTable extends Migration
     {
         Schema::create('fees', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->char('student',255);
+            $table->string('student',255);
             $table->integer('fees');
             $table->integer('paid');
-            $table->char('academic_year');
-            $table->char('term');
-            $table->char('std_class');
+            $table->string('academic_year',255);
+            $table->string('term',255);
+            $table->string('std_class',255);
             $table->mediumtext('remarks',500)->nullable();
             $table->timestamps();
         });
